@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class RedisTokenService(val redisTemplate: StringRedisTemplate) : TokenService {
+class RedisTokenService(private val redisTemplate: StringRedisTemplate) : TokenService {
     override fun extractToken(rawToken: String): UserToken? {
         val token = String(Base64.getDecoder().decode(rawToken))
         var username: String? = null

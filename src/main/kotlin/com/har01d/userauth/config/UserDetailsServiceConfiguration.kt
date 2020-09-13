@@ -1,4 +1,4 @@
-package com.har01d.userauth
+package com.har01d.userauth.config
 
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.ObjectProvider
