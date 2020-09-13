@@ -41,13 +41,13 @@ class UserAuthConfiguration {
     fun mapping() = FrameworkEndpointHandlerMapping()
 
     @Bean
-    fun tokenFilter(tokenService: TokenService): FilterRegistrationBean<TokenFilter> {
+    fun tokenFilter(tokenService: TokenService, properties: AuthProperties): FilterRegistrationBean<TokenFilter> {
         val registration = FilterRegistrationBean<TokenFilter>()
-        registration.filter = TokenFilter(tokenService)
+        registration.filter = TokenFilter(tokenService, properties)
         return registration
     }
 
     @Bean
     @ConditionalOnMissingBean
-    fun tokenService(): TokenService = InMemoryTokenService()
+    fun tokenService(properties: AuthProperties): TokenService = InMemoryTokenService(properties)
 }

@@ -39,7 +39,7 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
 
     override fun encodeToken(username: String, authority: String, rememberMe: Boolean): String {
         val now = Instant.now()
-        val expire = if (rememberMe) now.plus(7, ChronoUnit.DAYS) else now.plus(IDLE_TIMEOUT, ChronoUnit.MINUTES)
+        val expire = if (rememberMe) now.plus(7, ChronoUnit.DAYS) else now.plus(properties.idleTimeout, ChronoUnit.MINUTES)
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(ISSUER)
@@ -62,6 +62,5 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
         private const val ISSUER = "Har01d"
         private const val SUBJECT = "auth0"
         private const val AUDIENCE = "web"
-        private const val IDLE_TIMEOUT = 30L
     }
 }

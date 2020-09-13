@@ -1,5 +1,6 @@
 package com.har01d.userauth.token
 
+import com.har01d.userauth.config.AuthProperties
 import com.har01d.userauth.dto.UserToken
 import com.har01d.userauth.exception.UserUnauthorizedException
 import org.springframework.jdbc.core.JdbcTemplate
@@ -10,7 +11,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate) : TokenService {
+class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate, private val properties: AuthProperties) : TokenService {
     override fun extractToken(rawToken: String): UserToken? {
         val token = String(Base64.getDecoder().decode(rawToken))
         var username: String? = null
@@ -28,7 +29,7 @@ class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate) : TokenServic
                     RowMapper { rs, _ ->
                         Token(username, rs.getString("token"), rs.getTimestamp("activeTime").toInstant())
                     }, username).firstOrNull()
-            if (accessToken != null && rawToken == accessToken.token && accessToken.activeTime.plus(IDLE_TIMEOUT, ChronoUnit.MINUTES).isAfter(now.toInstant())) {
+            if (accessToken != null && rawToken == accessToken.token && accessToken.activeTime.plus(properties.idleTimeout, ChronoUnit.MINUTES).isAfter(now.toInstant())) {
                 if (!rememberMe) {
                     jdbcTemplate.update("UPDATE t_token SET activeTime=? WHERE username=?", now, username)
                 }
@@ -51,10 +52,6 @@ class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate) : TokenServic
 
     override fun deleteToken(username: String) {
         jdbcTemplate.update("DELETE FROM t_token WHERE username=?", username)
-    }
-
-    companion object {
-        private const val IDLE_TIMEOUT = 30L
     }
 }
 

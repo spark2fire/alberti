@@ -1,5 +1,6 @@
 package com.har01d.userauth.token
 
+import com.har01d.userauth.config.AuthProperties
 import com.har01d.userauth.dto.UserToken
 import com.har01d.userauth.exception.UserUnauthorizedException
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -8,7 +9,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class InMemoryTokenService : TokenService {
+class InMemoryTokenService(private val properties: AuthProperties) : TokenService {
     private val repository: ConcurrentHashMap<String, Token> = ConcurrentHashMap<String, Token>()
     override fun extractToken(rawToken: String): UserToken? {
         val token = String(Base64.getDecoder().decode(rawToken))
@@ -24,7 +25,7 @@ class InMemoryTokenService : TokenService {
         if (username != null) {
             val now = Instant.now()
             val accessToken = repository.get(username)
-            if (accessToken != null && rawToken == accessToken.token && accessToken.activeTime.plus(IDLE_TIMEOUT, ChronoUnit.MINUTES).isAfter(now)) {
+            if (accessToken != null && rawToken == accessToken.token && accessToken.activeTime.plus(properties.idleTimeout, ChronoUnit.MINUTES).isAfter(now)) {
                 if (!rememberMe) {
                     accessToken.activeTime = Instant.now()
                     repository[username] = accessToken
@@ -46,9 +47,5 @@ class InMemoryTokenService : TokenService {
 
     override fun deleteToken(username: String) {
         repository.remove(username)
-    }
-
-    companion object {
-        private const val IDLE_TIMEOUT = 30L
     }
 }

@@ -11,5 +11,5 @@ import org.springframework.data.redis.core.StringRedisTemplate
 class RedisTokenConfiguration {
     @Bean
     @ConditionalOnMissingBean
-    fun tokenService(redisTemplate: StringRedisTemplate): TokenService = RedisTokenService(redisTemplate)
+    fun tokenService(redisTemplate: StringRedisTemplate, properties: AuthProperties): TokenService = RedisTokenService(redisTemplate, properties)
 }
