@@ -4,4 +4,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 
 @ConfigurationProperties(prefix = "com.har01d.auth")
-class AuthProperties(val secretKey: String = "")
+class AuthProperties(var secretKey: String = "")
