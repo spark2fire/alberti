@@ -6,6 +6,7 @@ import com.har01d.userauth.token.TokenService
 import com.har01d.userauth.web.AuthEndpoint
 import com.har01d.userauth.web.FrameworkEndpointHandlerMapping
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse
 
 
 @Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(AuthProperties::class)
 class UserAuthConfiguration {
     @Bean
     @ConditionalOnMissingBean

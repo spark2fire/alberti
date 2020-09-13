@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "com.har01d.auth.secretKey",
+      "type": "java.lang.String",
+      "description": "The secret key for JWT token."
+    }
+  ]
+}

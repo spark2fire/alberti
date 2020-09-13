@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Configuration
 class JwtTokenConfiguration {
     @Bean
     @ConditionalOnMissingBean
-    fun tokenService(): TokenService = JwtTokenService()
+    fun tokenService(properties: AuthProperties): TokenService = JwtTokenService(properties)
 }

@@ -1,20 +1,32 @@
 package com.har01d.userauth.token
 
+import com.har01d.userauth.config.AuthProperties
 import com.har01d.userauth.dto.UserToken
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import java.security.Key
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 
-class JwtTokenService : TokenService {
+class JwtTokenService(private val properties: AuthProperties) : TokenService {
     private val repository: ConcurrentHashMap<String, Token> = ConcurrentHashMap<String, Token>()
+    private val key: Key = getKey()
+    private fun getKey(): Key {
+        return if (properties.secretKey.isNotEmpty()) {
+            Keys.hmacShaKeyFor(properties.secretKey.toByteArray())
+        } else {
+            Keys.secretKeyFor(SignatureAlgorithm.HS512)
+        }
+    }
+
     override fun extractToken(rawToken: String): UserToken? {
         val jws = Jwts.parserBuilder()
-                .setSigningKey(SIGN_KEY)
+                .setSigningKey(key)
                 .requireIssuer(ISSUER)
                 .requireSubject(SUBJECT)
                 .requireAudience(AUDIENCE)
@@ -38,7 +50,7 @@ class JwtTokenService : TokenService {
                 .claim("rememberMe", rememberMe)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expire))
-                .signWith(SignatureAlgorithm.HS256, SIGN_KEY)
+                .signWith(key)
                 .compact()
     }
 
@@ -50,7 +62,6 @@ class JwtTokenService : TokenService {
         private const val ISSUER = "Har01d"
         private const val SUBJECT = "auth0"
         private const val AUDIENCE = "web"
-        private const val SIGN_KEY = "Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E="
         private const val IDLE_TIMEOUT = 30L
     }
 }
