@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.har01d.userauth.UserAuthConfiguration,\
+com.har01d.userauth.UserDetailsServiceConfiguration
