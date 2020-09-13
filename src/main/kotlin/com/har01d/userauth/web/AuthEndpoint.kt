@@ -12,7 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@FrameworkEndpoint
+@ResponseBody
 @RequestMapping("/accounts")
 class AuthEndpoint(val passwordEncoder: PasswordEncoder,
                    val userDetailsService: UserDetailsService,
