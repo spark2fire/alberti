@@ -12,13 +12,12 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-
 class JwtTokenService(private val properties: AuthProperties) : TokenService {
     private val repository: ConcurrentHashMap<String, Token> = ConcurrentHashMap<String, Token>()
     private val key: Key = getKey()
     private fun getKey(): Key {
-        return if (properties.secretKey.isNotEmpty()) {
-            Keys.hmacShaKeyFor(properties.secretKey.toByteArray())
+        return if (properties.jwt.secretKey.isNotEmpty()) {
+            Keys.hmacShaKeyFor(properties.jwt.secretKey.toByteArray())
         } else {
             Keys.secretKeyFor(SignatureAlgorithm.HS512)
         }
@@ -27,9 +26,9 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
     override fun extractToken(rawToken: String): UserToken? {
         val jws = Jwts.parserBuilder()
                 .setSigningKey(key)
-                .requireIssuer(ISSUER)
-                .requireSubject(SUBJECT)
-                .requireAudience(AUDIENCE)
+                .requireIssuer(properties.jwt.issuer)
+                .requireSubject(properties.jwt.subject)
+                .requireAudience(properties.jwt.audience)
                 .build()
                 .parseClaimsJws(rawToken)
         val username = jws.body.get("username", String::class.java)
@@ -42,9 +41,9 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
         val expire = if (rememberMe) now.plus(7, ChronoUnit.DAYS) else now.plus(properties.idleTimeout, ChronoUnit.MINUTES)
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
-                .setIssuer(ISSUER)
-                .setSubject(SUBJECT)
-                .setAudience(AUDIENCE)
+                .setIssuer(properties.jwt.issuer)
+                .setSubject(properties.jwt.subject)
+                .setAudience(properties.jwt.audience)
                 .claim("username", username)
                 .claim("authority", authority)
                 .claim("rememberMe", rememberMe)
@@ -56,11 +55,5 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
 
     override fun deleteToken(username: String) {
         repository.remove(username)
-    }
-
-    companion object {
-        private const val ISSUER = "Har01d"
-        private const val SUBJECT = "auth0"
-        private const val AUDIENCE = "web"
     }
 }

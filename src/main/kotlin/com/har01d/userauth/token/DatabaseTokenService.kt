@@ -25,13 +25,13 @@ class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate, private val p
         }
         if (username != null) {
             val now = Timestamp.from(Instant.now())
-            val accessToken = jdbcTemplate.query("SELECT token,activeTime FROM t_token WHERE username=?",
+            val accessToken = jdbcTemplate.query("SELECT token,activeTime FROM ${properties.tableName} WHERE username=?",
                     RowMapper { rs, _ ->
                         Token(username, rs.getString("token"), rs.getTimestamp("activeTime").toInstant())
                     }, username).firstOrNull()
             if (accessToken != null && rawToken == accessToken.token && accessToken.activeTime.plus(properties.idleTimeout, ChronoUnit.MINUTES).isAfter(now.toInstant())) {
                 if (!rememberMe) {
-                    jdbcTemplate.update("UPDATE t_token SET activeTime=? WHERE username=?", now, username)
+                    jdbcTemplate.update("UPDATE ${properties.tableName} SET activeTime=? WHERE username=?", now, username)
                 }
                 return UserToken(username, setOf(SimpleGrantedAuthority(authority)), token)
             } else {
@@ -46,12 +46,12 @@ class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate, private val p
         var token: String = username + ":" + authority + ":" + (if (rememberMe) 1 else 0) + ":" + UUID.randomUUID()
         token = Base64.getEncoder().encodeToString(token.toByteArray())
         val now = Timestamp.from(Instant.now())
-        jdbcTemplate.update("INSERT INTO t_token (username,token,activeTime,createTime) VALUES (?,?,?,?)", username, token, now, now)
+        jdbcTemplate.update("INSERT INTO ${properties.tableName} (username,token,activeTime,createTime) VALUES (?,?,?,?)", username, token, now, now)
         return token
     }
 
     override fun deleteToken(username: String) {
-        jdbcTemplate.update("DELETE FROM t_token WHERE username=?", username)
+        jdbcTemplate.update("DELETE FROM ${properties.tableName} WHERE username=?", username)
     }
 }
 

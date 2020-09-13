@@ -16,9 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
 import javax.servlet.http.HttpServletResponse
 
-
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(AuthProperties::class)
+@EnableConfigurationProperties(value = [AuthProperties::class])
 class UserAuthConfiguration {
     @Bean
     @ConditionalOnMissingBean

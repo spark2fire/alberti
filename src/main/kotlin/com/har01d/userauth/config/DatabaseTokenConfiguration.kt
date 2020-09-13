@@ -12,7 +12,7 @@ class DatabaseTokenConfiguration {
     @Bean
     @ConditionalOnMissingBean
     fun tokenService(jdbcTemplate: JdbcTemplate, properties: AuthProperties): TokenService {
-        jdbcTemplate.execute("create table if not exists t_token(username varchar(255) primary key,token varchar(255) not null,activeTime datetime not null,createTime datetime not null)")
+        jdbcTemplate.execute("create table if not exists ${properties.tableName} (username varchar(255) primary key,token varchar(255) not null,activeTime datetime not null,createTime datetime not null)")
         return DatabaseTokenService(jdbcTemplate, properties)
     }
 }
