@@ -1,10 +1,10 @@
-package com.har01d.auth.config
+package cn.har01d.auth.config
 
-import com.har01d.auth.token.InMemoryTokenService
-import com.har01d.auth.token.TokenFilter
-import com.har01d.auth.token.TokenService
-import com.har01d.auth.web.AuthEndpoint
-import com.har01d.auth.web.FrameworkEndpointHandlerMapping
+import cn.har01d.auth.token.InMemoryTokenService
+import cn.har01d.auth.token.TokenFilter
+import cn.har01d.auth.token.TokenService
+import cn.har01d.auth.web.AuthEndpoint
+import cn.har01d.auth.web.FrameworkEndpointHandlerMapping
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean

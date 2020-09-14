@@ -1,6 +1,6 @@
-package com.har01d.auth.annotation
+package cn.har01d.auth.annotation
 
-import com.har01d.auth.config.RedisTokenConfiguration
+import cn.har01d.auth.config.RedisTokenConfiguration
 import org.springframework.context.annotation.Import
 
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.CLASS)

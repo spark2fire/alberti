@@ -1,6 +1,6 @@
-package com.har01d.auth.token
+package cn.har01d.auth.token
 
-import com.har01d.auth.dto.UserToken
+import cn.har01d.auth.dto.UserToken
 
 interface TokenService {
     fun extractToken(rawToken: String): UserToken?

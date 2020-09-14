@@ -1,4 +1,4 @@
-package com.har01d.auth.token
+package cn.har01d.auth.token
 
 import java.time.Instant
 

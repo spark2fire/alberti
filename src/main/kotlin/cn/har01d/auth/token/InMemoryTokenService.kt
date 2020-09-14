@@ -1,14 +1,16 @@
-package com.har01d.auth.token
+package cn.har01d.auth.token
 
-import com.har01d.auth.config.AuthProperties
-import com.har01d.auth.dto.UserToken
-import com.har01d.auth.exception.UserUnauthorizedException
-import org.springframework.data.redis.core.StringRedisTemplate
+import cn.har01d.auth.config.AuthProperties
+import cn.har01d.auth.dto.UserToken
+import cn.har01d.auth.exception.UserUnauthorizedException
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.ConcurrentHashMap
 
-class RedisTokenService(private val redisTemplate: StringRedisTemplate, private val properties: AuthProperties) : TokenService {
+class InMemoryTokenService(private val properties: AuthProperties) : TokenService {
+    private val repository: ConcurrentHashMap<String, Token> = ConcurrentHashMap<String, Token>()
     override fun extractToken(rawToken: String): UserToken? {
         val token = String(Base64.getDecoder().decode(rawToken))
         var username: String? = null
@@ -21,11 +23,12 @@ class RedisTokenService(private val redisTemplate: StringRedisTemplate, private 
             rememberMe = "1" == parts[2]
         }
         if (username != null) {
-            val key = properties.redisPrefix + username
-            val accessToken: String? = redisTemplate.opsForValue().get(key)
-            if (rawToken == accessToken) {
+            val now = Instant.now()
+            val accessToken = repository.get(username)
+            if (accessToken != null && rawToken == accessToken.token && accessToken.activeTime.plus(properties.idleTimeout, ChronoUnit.MINUTES).isAfter(now)) {
                 if (!rememberMe) {
-                    redisTemplate.expire(key, properties.idleTimeout, TimeUnit.MINUTES)
+                    accessToken.activeTime = Instant.now()
+                    repository[username] = accessToken
                 }
                 return UserToken(username, setOf(SimpleGrantedAuthority(authority)), token)
             } else {
@@ -38,15 +41,11 @@ class RedisTokenService(private val redisTemplate: StringRedisTemplate, private 
     override fun encodeToken(username: String, authority: String, rememberMe: Boolean): String {
         var token: String = username + ":" + authority + ":" + (if (rememberMe) 1 else 0) + ":" + UUID.randomUUID()
         token = Base64.getEncoder().encodeToString(token.toByteArray())
-        val key = properties.redisPrefix + username
-        redisTemplate.opsForValue().set(key, token)
-        if (!rememberMe) {
-            redisTemplate.expire(key, properties.idleTimeout, TimeUnit.MINUTES)
-        }
+        repository[username] = Token(username, token, Instant.now())
         return token
     }
 
     override fun deleteToken(username: String) {
-        redisTemplate.delete(properties.redisPrefix + username)
+        repository.remove(username)
     }
 }

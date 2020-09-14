@@ -1,4 +1,4 @@
-package com.har01d.auth.config
+package cn.har01d.auth.config
 
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.ObjectProvider

@@ -1,8 +1,8 @@
-package com.har01d.auth.config
+package cn.har01d.auth.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
-@ConfigurationProperties(prefix = "com.har01d.auth")
+@ConfigurationProperties(prefix = "cn.har01d.auth")
 class AuthProperties(
         var idleTimeout: Long = 30,
         var redisPrefix: String = "TOKEN:a:",

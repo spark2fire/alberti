@@ -1,4 +1,4 @@
-package com.har01d.auth.web
+package cn.har01d.auth.web
 
 import org.springframework.core.annotation.AnnotationUtils
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
