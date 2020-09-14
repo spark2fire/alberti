@@ -1,4 +1,4 @@
-package com.har01d.userauth.config
+package com.har01d.auth.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

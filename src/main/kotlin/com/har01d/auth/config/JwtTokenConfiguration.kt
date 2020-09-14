@@ -1,7 +1,7 @@
-package com.har01d.userauth.config
+package com.har01d.auth.config
 
-import com.har01d.userauth.token.JwtTokenService
-import com.har01d.userauth.token.TokenService
+import com.har01d.auth.token.JwtTokenService
+import com.har01d.auth.token.TokenService
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

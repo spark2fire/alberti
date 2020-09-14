@@ -1,4 +1,4 @@
-package com.har01d.userauth.dto
+package com.har01d.auth.dto
 
 import org.springframework.security.core.GrantedAuthority
 

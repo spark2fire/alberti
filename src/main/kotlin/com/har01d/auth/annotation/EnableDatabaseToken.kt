@@ -1,6 +1,6 @@
-package com.har01d.userauth.annotation
+package com.har01d.auth.annotation
 
-import com.har01d.userauth.config.DatabaseTokenConfiguration
+import com.har01d.auth.config.DatabaseTokenConfiguration
 import org.springframework.context.annotation.Import
 
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.CLASS)

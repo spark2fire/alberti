@@ -1,4 +1,4 @@
-package com.har01d.userauth.exception
+package com.har01d.auth.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

@@ -1,8 +1,8 @@
-package com.har01d.userauth.token
+package com.har01d.auth.token
 
-import com.har01d.userauth.config.AuthProperties
-import com.har01d.userauth.dto.UserToken
-import com.har01d.userauth.exception.UserUnauthorizedException
+import com.har01d.auth.config.AuthProperties
+import com.har01d.auth.dto.UserToken
+import com.har01d.auth.exception.UserUnauthorizedException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder

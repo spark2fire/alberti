@@ -1,10 +1,10 @@
-package com.har01d.userauth.web
+package com.har01d.auth.web
 
 
-import com.har01d.userauth.dto.LoginDto
-import com.har01d.userauth.dto.UserToken
-import com.har01d.userauth.exception.UserUnauthorizedException
-import com.har01d.userauth.token.TokenService
+import com.har01d.auth.dto.LoginDto
+import com.har01d.auth.dto.UserToken
+import com.har01d.auth.exception.UserUnauthorizedException
+import com.har01d.auth.token.TokenService
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
