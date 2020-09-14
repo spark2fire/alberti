@@ -9,9 +9,24 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.har01d</groupId>
-    <artifactId>user-auth</artifactId>
+    <artifactId>auth</artifactId>
     <version>0.0.1</version>
-    <name>user-auth</name>
+    <name>auth</name>
+    <description>Token service for authentication, support Redis, database, memory and JWT Token.</description>
+
+    <organization>
+        <name>power721</name>
+        <url>https://github.com/power721</url>
+    </organization>
+    <inceptionYear>2020</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <java.version>1.8</java.version>
@@ -86,6 +101,14 @@
                         <plugin>jpa</plugin>
                     </compilerPlugins>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>

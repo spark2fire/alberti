@@ -1,9 +1,51 @@
 {
   "properties": [
     {
-      "name": "com.har01d.auth.secretKey",
+      "name": "com.har01d.auth.idle-timeout",
+      "type": "java.lang.String",
+      "description": "The token idle timeout (minutes).",
+      "defaultValue": 30
+    },
+    {
+      "name": "com.har01d.auth.header-name",
+      "type": "java.lang.String",
+      "description": "The token header name.",
+      "defaultValue": "X-ACCESS-TOKEN"
+    },
+    {
+      "name": "com.har01d.auth.table-name",
+      "type": "java.lang.String",
+      "description": "The token table name.",
+      "defaultValue": "t_token"
+    },
+    {
+      "name": "com.har01d.auth.redis-prefix",
+      "type": "java.lang.String",
+      "description": "The redis token key prefix.",
+      "defaultValue": "TOKEN:a:"
+    },
+    {
+      "name": "com.har01d.auth.jwt.secretKey",
       "type": "java.lang.String",
       "description": "The secret key for JWT token."
+    },
+    {
+      "name": "com.har01d.auth.jwt.issuer",
+      "type": "java.lang.String",
+      "description": "The issuer for JWT token.",
+      "defaultValue": "Har01d"
+    },
+    {
+      "name": "com.har01d.auth.jwt.subject",
+      "type": "java.lang.String",
+      "description": "The subject for JWT token.",
+      "defaultValue": "auth0"
+    },
+    {
+      "name": "com.har01d.auth.jwt.audience",
+      "type": "java.lang.String",
+      "description": "The audience for JWT token.",
+      "defaultValue": "web"
     }
   ]
 }
