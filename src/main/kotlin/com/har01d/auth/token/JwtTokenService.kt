@@ -2,6 +2,7 @@ package com.har01d.auth.token
 
 import com.har01d.auth.config.AuthProperties
 import com.har01d.auth.dto.UserToken
+import com.har01d.auth.exception.UserUnauthorizedException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -24,16 +25,20 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
     }
 
     override fun extractToken(rawToken: String): UserToken? {
-        val jws = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .requireIssuer(properties.jwt.issuer)
-                .requireSubject(properties.jwt.subject)
-                .requireAudience(properties.jwt.audience)
-                .build()
-                .parseClaimsJws(rawToken)
-        val username = jws.body.get("username", String::class.java)
-        val authority = jws.body.get("authority", String::class.java)
-        return UserToken(username, setOf(SimpleGrantedAuthority(authority)), rawToken)
+        try {
+            val jws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .requireIssuer(properties.jwt.issuer)
+                    .requireSubject(properties.jwt.subject)
+                    .requireAudience(properties.jwt.audience)
+                    .build()
+                    .parseClaimsJws(rawToken)
+            val username = jws.body.get("username", String::class.java)
+            val authority = jws.body.get("authority", String::class.java)
+            return UserToken(username, setOf(SimpleGrantedAuthority(authority)), rawToken)
+        } catch (e: Exception) {
+            throw UserUnauthorizedException("Token失效", e)
+        }
     }
 
     override fun encodeToken(username: String, authority: String, rememberMe: Boolean): String {
