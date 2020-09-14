@@ -11,7 +11,6 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
 class TokenFilter(private val tokenService: TokenService, private val properties: AuthProperties) : OncePerRequestFilter() {
     override fun doFilterInternal(
             request: HttpServletRequest,
