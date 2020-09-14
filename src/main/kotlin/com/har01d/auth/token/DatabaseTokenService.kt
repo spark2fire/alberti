@@ -55,4 +55,3 @@ class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate, private val p
     }
 }
 
-class Token(val username: String, val token: String, var activeTime: Instant)
