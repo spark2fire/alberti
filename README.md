@@ -2,7 +2,7 @@
 Token service for authentication, support Redis, database, memory and JWT Token.
 
 Designed for Spring Boot projects.
-##Maven
+## Maven
 ```xml
 <dependency>
     <groupId>cn.har01d</groupId>
