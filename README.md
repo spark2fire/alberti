@@ -42,15 +42,19 @@ X-ACCESS-TOKEN: {{TOKEN}}
 ## Token Usage
 Add `token` in Header or Parameter `X-ACCESS-TOKEN`.
 # Configuration
-```properties
-cn.har01d.auth.idle-timeout=30
-cn.har01d.auth.header-name="X-ACCESS-TOKEN"
-cn.har01d.auth.table-name=""t_token
-cn.har01d.auth.redis-prefix="TOKEN:a:"
-cn.har01d.auth.jwt.secretKey=
-cn.har01d.auth.jwt.issuer="Har01d"
-cn.har01d.auth.jwt.subject="auth0"
-cn.har01d.auth.jwt.audience="web"
+```yaml
+cn:
+  har01d:
+    auth:
+      idle-timeout: 30
+      header-name: "X-ACCESS-TOKEN"
+      table-name: "t_token"
+      redis-prefix: "TOKEN:a:"
+      jwt:
+        secretKey: ""
+        issuer: "Har01d"
+        subject: "auth0"
+        audience: "web"
 ```
 ## Example
 ```kotlin
