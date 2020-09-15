@@ -1,7 +1,15 @@
 # auth
 Token service for authentication, support Redis, database, memory and JWT Token.
 
-Enabled for Spring Boot projects.
+Designed for Spring Boot projects.
+##Maven
+```xml
+<dependency>
+    <groupId>cn.har01d</groupId>
+    <artifactId>auth</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
 ## Support Types
 ### Redis
 `@EnableRedisToken`
