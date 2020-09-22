@@ -39,6 +39,6 @@ class TokenFilter(private val tokenService: TokenService, private val properties
 
     private fun buildAuthentication(token: String): Authentication? {
         val userToken: UserToken = tokenService.extractToken(token) ?: return null
-        return UsernamePasswordAuthenticationToken(userToken.username, "", userToken.authorities)
+        return UsernamePasswordAuthenticationToken(userToken.name, "", userToken.authorities)
     }
 }
