@@ -14,7 +14,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class JwtTokenService(private val properties: AuthProperties) : TokenService {
-    private val repository: ConcurrentHashMap<String, Token> = ConcurrentHashMap<String, Token>()
+    private val repository: ConcurrentHashMap<String, Token> = ConcurrentHashMap()
     private val key: Key = getKey()
     private fun getKey(): Key {
         return if (properties.jwt.secretKey.isNotEmpty()) {
@@ -24,7 +24,7 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
         }
     }
 
-    override fun extractToken(rawToken: String): UserToken? {
+    override fun extractToken(rawToken: String): UserToken {
         try {
             val jws = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -43,7 +43,7 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
 
     override fun encodeToken(username: String, authority: String, rememberMe: Boolean): String {
         val now = Instant.now()
-        val expire = if (rememberMe) now.plus(7, ChronoUnit.DAYS) else now.plus(properties.idleTimeout, ChronoUnit.MINUTES)
+        val expire = if (rememberMe) now.plus(properties.jwt.rememberDays, ChronoUnit.DAYS) else now.plus(properties.idleTimeout, ChronoUnit.MINUTES)
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(properties.jwt.issuer)

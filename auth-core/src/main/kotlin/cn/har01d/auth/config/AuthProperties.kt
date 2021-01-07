@@ -15,5 +15,6 @@ class JwtProperties(
         var secretKey: String = "",
         var issuer: String = "Har01d",
         var subject: String = "auth0",
-        var audience: String = "web"
+        var audience: String = "web",
+        var rememberDays: Long = 7
 )
