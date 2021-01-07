@@ -11,7 +11,7 @@
     </parent>
     <groupId>cn.har01d</groupId>
     <artifactId>auth</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <name>auth</name>
     <packaging>pom</packaging>
     <description>Token service for authentication, support Redis, database, memory and JWT Token.</description>
