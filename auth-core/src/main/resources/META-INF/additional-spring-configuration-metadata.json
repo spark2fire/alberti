@@ -1,48 +1,48 @@
 {
   "properties": [
     {
-      "name": "cn.har01d.auth.idle-timeout",
+      "name": "cn.spark2fire.auth.idle-timeout",
       "type": "java.lang.String",
       "description": "The token idle timeout (minutes).",
       "defaultValue": 30
     },
     {
-      "name": "cn.har01d.auth.header-name",
+      "name": "cn.spark2fire.auth.header-name",
       "type": "java.lang.String",
       "description": "The token header name.",
       "defaultValue": "X-ACCESS-TOKEN"
     },
     {
-      "name": "cn.har01d.auth.table-name",
+      "name": "cn.spark2fire.auth.table-name",
       "type": "java.lang.String",
       "description": "The token table name.",
       "defaultValue": "t_token"
     },
     {
-      "name": "cn.har01d.auth.redis-prefix",
+      "name": "cn.spark2fire.auth.redis-prefix",
       "type": "java.lang.String",
       "description": "The redis token key prefix.",
       "defaultValue": "TOKEN:a:"
     },
     {
-      "name": "cn.har01d.auth.jwt.secretKey",
+      "name": "cn.spark2fire.auth.jwt.secretKey",
       "type": "java.lang.String",
       "description": "The secret key for JWT token."
     },
     {
-      "name": "cn.har01d.auth.jwt.issuer",
+      "name": "cn.spark2fire.auth.jwt.issuer",
       "type": "java.lang.String",
       "description": "The issuer for JWT token.",
       "defaultValue": "Har01d"
     },
     {
-      "name": "cn.har01d.auth.jwt.subject",
+      "name": "cn.spark2fire.auth.jwt.subject",
       "type": "java.lang.String",
       "description": "The subject for JWT token.",
       "defaultValue": "auth0"
     },
     {
-      "name": "cn.har01d.auth.jwt.audience",
+      "name": "cn.spark2fire.auth.jwt.audience",
       "type": "java.lang.String",
       "description": "The audience for JWT token.",
       "defaultValue": "web"

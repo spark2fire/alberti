@@ -5,7 +5,7 @@ Designed for Spring Boot projects.
 ## Maven
 ```xml
 <dependency>
-    <groupId>cn.har01d</groupId>
+    <groupId>cn.spark2fire</groupId>
     <artifactId>auth</artifactId>
     <version>0.0.1</version>
 </dependency>
@@ -58,9 +58,9 @@ cn:
 ```
 ## Example
 ```kotlin
-package cn.har01d.example
+package cn.spark2fire.example
 
-import cn.har01d.auth.annotation.EnableJwtToken
+import cn.spark2fire.auth.annotation.EnableJwtToken
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
