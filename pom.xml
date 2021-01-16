@@ -11,7 +11,7 @@
     </parent>
     <groupId>cn.spark2fire</groupId>
     <artifactId>auth</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <name>auth</name>
     <packaging>pom</packaging>
     <description>Token service for authentication, support Redis, database, memory and JWT Token.</description>

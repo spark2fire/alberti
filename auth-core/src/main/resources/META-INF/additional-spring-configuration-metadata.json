@@ -25,7 +25,7 @@
       "defaultValue": "TOKEN:a:"
     },
     {
-      "name": "cn.spark2fire.auth.jwt.secretKey",
+      "name": "cn.spark2fire.auth.jwt.secret-key",
       "type": "java.lang.String",
       "description": "The secret key for JWT token."
     },

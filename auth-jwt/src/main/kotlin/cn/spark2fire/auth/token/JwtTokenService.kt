@@ -6,6 +6,8 @@ import cn.spark2fire.auth.exception.UserUnauthorizedException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.security.Key
 import java.time.Instant
@@ -14,12 +16,15 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class JwtTokenService(private val properties: AuthProperties) : TokenService {
+    private val logger: Logger = LoggerFactory.getLogger(JwtTokenService::class.java)
     private val repository: ConcurrentHashMap<String, Token> = ConcurrentHashMap()
     private val key: Key = getKey()
     private fun getKey(): Key {
         return if (properties.jwt.secretKey.isNotEmpty()) {
+            logger.info("Use secret key from config")
             Keys.hmacShaKeyFor(properties.jwt.secretKey.toByteArray())
         } else {
+            logger.info("Generate secret key")
             Keys.secretKeyFor(SignatureAlgorithm.HS512)
         }
     }
@@ -37,6 +42,7 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
             val authority = jws.body.get("authority", String::class.java)
             return UserToken(username, setOf(SimpleGrantedAuthority(authority)), rawToken)
         } catch (e: Exception) {
+            logger.warn("Token失效", e)
             throw UserUnauthorizedException("Token失效", e)
         }
     }
