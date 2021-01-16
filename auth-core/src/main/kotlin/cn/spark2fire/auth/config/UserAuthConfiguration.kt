@@ -8,6 +8,7 @@ import cn.spark2fire.auth.web.FrameworkEndpointHandlerMapping
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
@@ -50,8 +51,8 @@ class UserAuthConfiguration {
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun authEndpoint(passwordEncoder: PasswordEncoder, userDetailsService: UserDetailsService, tokenService: TokenService): AuthEndpoint {
-        return AuthEndpoint(passwordEncoder, userDetailsService, tokenService)
+    fun authEndpoint(passwordEncoder: PasswordEncoder, publisher: ApplicationEventPublisher, userDetailsService: UserDetailsService, tokenService: TokenService): AuthEndpoint {
+        return AuthEndpoint(passwordEncoder, publisher, userDetailsService, tokenService)
     }
 
     @Bean
