@@ -33,7 +33,7 @@
       "name": "cn.spark2fire.auth.jwt.issuer",
       "type": "java.lang.String",
       "description": "The issuer for JWT token.",
-      "defaultValue": "Har01d"
+      "defaultValue": "spark2fire"
     },
     {
       "name": "cn.spark2fire.auth.jwt.subject",

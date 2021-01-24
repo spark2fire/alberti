@@ -5,20 +5,20 @@ Designed for Spring Boot projects.
 ## Maven
 ```xml
 <dependency>
-    <groupId>cn.spark2fire</groupId>
-    <artifactId>auth</artifactId>
+    <groupId>cn.spark2fire.alberti</groupId>
+    <artifactId>auth-jwt</artifactId>
     <version>0.0.1</version>
 </dependency>
 ```
 ## Support Types
 ### Redis
-`@EnableRedisToken`
+Store the token in Redis server.
 ### Database
-`@EnableDatabaseToken`
+Store the token in database table.
 ### Memory
 Default
 ### JWT
-`@EnableJwtToken`
+JWT Token store in client.
 ## Endpoints
 ### Login
 ```http request
@@ -44,7 +44,7 @@ Add `token` in Header or Parameter `X-ACCESS-TOKEN`.
 # Configuration
 ```yaml
 cn:
-  har01d:
+  spark2fire:
     auth:
       idle-timeout: 30
       header-name: "X-ACCESS-TOKEN"
@@ -52,7 +52,7 @@ cn:
       redis-prefix: "TOKEN:a:"
       jwt:
         secretKey: ""
-        issuer: "Har01d"
+        issuer: "spark2fire"
         subject: "auth0"
         audience: "web"
 ```
@@ -65,7 +65,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-@EnableJwtToken
 class ExampleApplication
 
 fun main(args: Array<String>) {

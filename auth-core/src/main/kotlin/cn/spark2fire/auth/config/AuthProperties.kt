@@ -12,9 +12,24 @@ class AuthProperties(
 )
 
 class JwtProperties(
+        /**
+         * The secret key to encode JWT token, at least 256 bit.
+         */
         var secretKey: String = "",
-        var issuer: String = "Har01d",
+        /**
+         * The JWT token issuer.
+         */
+        var issuer: String = "spark2fire",
+        /**
+         * The JWT token subject.
+         */
         var subject: String = "auth0",
+        /**
+         * The JWT token audience.
+         */
         var audience: String = "web",
-        var rememberDays: Long = 7
+        /**
+         * The JWT token expire time, 30 days by default.
+         */
+        var rememberDays: Long = 30
 )

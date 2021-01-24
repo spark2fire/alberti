@@ -3,17 +3,19 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>auth</artifactId>
+        <artifactId>alberti</artifactId>
         <groupId>cn.spark2fire</groupId>
-        <version>0.0.7</version>
+        <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>cn.spark2fire.alberti</groupId>
     <artifactId>auth-redis</artifactId>
+    <description>alberti authentication redis support</description>
 
     <dependencies>
         <dependency>
-            <groupId>cn.spark2fire</groupId>
+            <groupId>cn.spark2fire.alberti</groupId>
             <artifactId>auth-core</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -39,14 +41,6 @@
                         <plugin>jpa</plugin>
                     </compilerPlugins>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>kapt</id>
-                        <goals>
-                            <goal>kapt</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
