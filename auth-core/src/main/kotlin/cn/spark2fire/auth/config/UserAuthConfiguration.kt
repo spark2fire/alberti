@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.boot.web.servlet.filter.OrderedFilter
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -69,11 +70,15 @@ class UserAuthConfiguration {
     fun mapping() = FrameworkEndpointHandlerMapping()
 
     @Bean
-    fun tokenFilter(tokenService: TokenService, properties: AuthProperties): FilterRegistrationBean<TokenFilter> {
+    fun filterRegistrationBean(tokenFilter: TokenFilter): FilterRegistrationBean<TokenFilter> {
         val registration = FilterRegistrationBean<TokenFilter>()
-        registration.filter = TokenFilter(tokenService, properties)
+        registration.filter = tokenFilter
+        registration.order = OrderedFilter.REQUEST_WRAPPER_FILTER_MAX_ORDER + 100
         return registration
     }
+
+    @Bean
+    fun tokenFilter(tokenService: TokenService, properties: AuthProperties) = TokenFilter(tokenService, properties)
 
     @Bean
     @ConditionalOnMissingBean
