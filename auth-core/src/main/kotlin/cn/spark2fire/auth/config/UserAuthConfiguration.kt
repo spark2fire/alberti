@@ -5,7 +5,10 @@ import cn.spark2fire.auth.token.TokenFilter
 import cn.spark2fire.auth.token.TokenService
 import cn.spark2fire.auth.web.AuthEndpoint
 import cn.spark2fire.auth.web.FrameworkEndpointHandlerMapping
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
+import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.ApplicationEventPublisher
@@ -32,17 +35,24 @@ class UserAuthConfiguration {
         }
     }
 
-    @Order(90)
-    @Configuration
-    class DefaultWebSecurityConfigurer : WebSecurityConfigurerAdapter() {
-        override fun configure(http: HttpSecurity) {
-            http
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .csrf().disable()
-                    .formLogin().disable()
-                    .logout().disable()
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnClass(WebSecurityConfigurerAdapter::class)
+    @ConditionalOnMissingBean(WebSecurityConfigurerAdapter::class)
+    @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+    class SpringBootWebSecurityConfiguration {
+        @Configuration(proxyBeanMethods = false)
+        @Order(SecurityProperties.BASIC_AUTH_ORDER)
+        internal class DefaultWebSecurityConfigurer : WebSecurityConfigurerAdapter() {
+            override fun configure(http: HttpSecurity) {
+                http.authorizeRequests { requests -> requests.anyRequest().authenticated() }
+                http
+                        .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .and()
+                        .csrf().disable()
+                        .formLogin().disable()
+                        .logout().disable()
+            }
         }
     }
 
