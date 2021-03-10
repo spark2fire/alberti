@@ -38,7 +38,14 @@ class TokenFilter(private val tokenService: TokenService, private val properties
     }
 
     private fun buildAuthentication(token: String): Authentication? {
-        val userToken: UserToken = tokenService.extractToken(token) ?: return null
-        return UsernamePasswordAuthenticationToken(userToken.name, "", userToken.authorities)
+        try {
+            val userToken: UserToken = tokenService.extractToken(token) ?: return null
+            return UsernamePasswordAuthenticationToken(userToken.name, "", userToken.authorities)
+        } catch (e: UserUnauthorizedException) {
+            throw e
+        } catch (e: Exception) {
+            logger.warn("Token失效", e)
+            throw UserUnauthorizedException("Token失效", e)
+        }
     }
 }

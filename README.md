@@ -60,7 +60,6 @@ cn:
 ```kotlin
 package cn.spark2fire.example
 
-import cn.spark2fire.auth.annotation.EnableJwtToken
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
