@@ -3,6 +3,7 @@ package cn.spark2fire.auth.web
 import cn.spark2fire.auth.dto.LoginDto
 import cn.spark2fire.auth.dto.UserToken
 import cn.spark2fire.auth.event.UserLoginEvent
+import cn.spark2fire.auth.event.UserLoginFailedEvent
 import cn.spark2fire.auth.event.UserLogoutEvent
 import cn.spark2fire.auth.exception.UserUnauthorizedException
 import cn.spark2fire.auth.token.TokenService
@@ -30,6 +31,7 @@ class AuthEndpoint(val passwordEncoder: PasswordEncoder,
             publisher.publishEvent(UserLoginEvent(account.username))
             return UserToken(user.username, authorities, token)
         }
+        publisher.publishEvent(UserLoginFailedEvent(account.username))
         throw UserUnauthorizedException("用户或密码错误")
     }
 
