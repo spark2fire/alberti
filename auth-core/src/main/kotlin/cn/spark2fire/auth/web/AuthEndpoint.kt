@@ -6,6 +6,7 @@ import cn.spark2fire.auth.event.UserLoginEvent
 import cn.spark2fire.auth.event.UserLoginFailedEvent
 import cn.spark2fire.auth.event.UserLogoutEvent
 import cn.spark2fire.auth.exception.UserUnauthorizedException
+import cn.spark2fire.auth.handler.UserAuthHandler
 import cn.spark2fire.auth.token.TokenService
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.Authentication
@@ -18,21 +19,29 @@ import org.springframework.web.bind.annotation.*
 @FrameworkEndpoint
 @ResponseBody
 @RequestMapping("/accounts")
-class AuthEndpoint(val passwordEncoder: PasswordEncoder,
-                   val publisher: ApplicationEventPublisher,
-                   val userDetailsService: UserDetailsService,
-                   val tokenService: TokenService) {
+class AuthEndpoint(
+    val passwordEncoder: PasswordEncoder,
+    val publisher: ApplicationEventPublisher,
+    val userDetailsService: UserDetailsService,
+    val tokenService: TokenService,
+    val userAuthHandler: UserAuthHandler,
+) {
     @PostMapping("/login")
     fun login(@RequestBody account: LoginDto): UserToken {
+        userAuthHandler.preLogin(account)
         val user = userDetailsService.loadUserByUsername(account.username)
         if (user != null && passwordEncoder.matches(account.password, user.password)) {
-            val authorities = if (user.authorities.isEmpty()) setOf(SimpleGrantedAuthority("ROLE_USER")) else user.authorities
+            val authorities =
+                if (user.authorities.isEmpty()) setOf(SimpleGrantedAuthority("ROLE_USER")) else user.authorities
             val token = tokenService.encodeToken(user.username, authorities.first().authority, account.rememberMe)
             publisher.publishEvent(UserLoginEvent(account.username))
+            userAuthHandler.onLoginSuccess(account.username)
             return UserToken(user.username, authorities, token)
+        } else {
+            publisher.publishEvent(UserLoginFailedEvent(account.username))
+            userAuthHandler.onLoginFail(account.username)
+            throw UserUnauthorizedException("用户或密码错误")
         }
-        publisher.publishEvent(UserLoginFailedEvent(account.username))
-        throw UserUnauthorizedException("用户或密码错误")
     }
 
     @PostMapping("/logout")
@@ -41,6 +50,7 @@ class AuthEndpoint(val passwordEncoder: PasswordEncoder,
         authentication?.let {
             tokenService.deleteToken(it.name)
             publisher.publishEvent(UserLogoutEvent(it.name))
+            userAuthHandler.onLogoutSuccess(it.name)
         }
     }
 

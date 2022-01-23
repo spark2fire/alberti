@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 cn.spark2fire.auth.config.UserAuthConfiguration,\
+cn.spark2fire.auth.config.LoginHandlerConfiguration,\
 cn.spark2fire.auth.config.UserDetailsServiceConfiguration

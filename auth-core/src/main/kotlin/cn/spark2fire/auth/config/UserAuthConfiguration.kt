@@ -1,5 +1,6 @@
 package cn.spark2fire.auth.config
 
+import cn.spark2fire.auth.handler.UserAuthHandler
 import cn.spark2fire.auth.token.InMemoryTokenService
 import cn.spark2fire.auth.token.TokenFilter
 import cn.spark2fire.auth.token.TokenService
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import javax.servlet.http.HttpServletResponse
 
 @Configuration(proxyBeanMethods = false)
@@ -41,16 +43,18 @@ class UserAuthConfiguration {
     class SpringBootWebSecurityConfiguration {
         @Configuration(proxyBeanMethods = false)
         @Order(SecurityProperties.BASIC_AUTH_ORDER)
-        internal class DefaultWebSecurityConfigurer : WebSecurityConfigurerAdapter() {
+        internal class DefaultWebSecurityConfigurer(private val tokenFilter: TokenFilter) :
+            WebSecurityConfigurerAdapter() {
             override fun configure(http: HttpSecurity) {
                 http.authorizeRequests { requests -> requests.anyRequest().authenticated() }
                 http
-                        .sessionManagement()
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        .and()
-                        .csrf().disable()
-                        .formLogin().disable()
-                        .logout().disable()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .csrf().disable()
+                    .formLogin().disable()
+                    .logout().disable()
+                    .addFilterBefore(tokenFilter, BasicAuthenticationFilter::class.java)
             }
         }
     }
@@ -60,13 +64,30 @@ class UserAuthConfiguration {
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun authEndpoint(passwordEncoder: PasswordEncoder, publisher: ApplicationEventPublisher, userDetailsService: UserDetailsService, tokenService: TokenService): AuthEndpoint {
-        return AuthEndpoint(passwordEncoder, publisher, userDetailsService, tokenService)
+    fun authEndpoint(
+        passwordEncoder: PasswordEncoder,
+        publisher: ApplicationEventPublisher,
+        userDetailsService: UserDetailsService,
+        tokenService: TokenService,
+        userAuthHandler: UserAuthHandler
+    ): AuthEndpoint {
+        return AuthEndpoint(
+            passwordEncoder,
+            publisher,
+            userDetailsService,
+            tokenService,
+            userAuthHandler,
+        )
     }
 
     @Bean
     fun mapping() = FrameworkEndpointHandlerMapping()
 
+    /**
+     * 需要手动注册filter
+     * @see WebSecurityConfigurerAdapter.configure(HttpSecurity)
+     * http.addFilterBefore(tokenFilter, BasicAuthenticationFilter::class.java)
+     */
     @Bean
     fun tokenFilter(tokenService: TokenService, properties: AuthProperties) = TokenFilter(tokenService, properties)
 
