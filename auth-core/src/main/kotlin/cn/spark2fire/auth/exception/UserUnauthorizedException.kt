@@ -8,6 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus
  */
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 class UserUnauthorizedException : RuntimeException {
-    constructor(message: String) : super(message)
-    constructor(message: String, cause: Throwable?) : super(message, cause)
+    val code: Int
+
+    constructor(message: String, code: Int = 0) : super(message) {
+        this.code = code
+    }
+
+    constructor(message: String, code: Int, cause: Throwable?) : super(message, cause) {
+        this.code = code
+    }
 }

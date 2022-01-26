@@ -35,7 +35,7 @@ class DatabaseTokenService(private val jdbcTemplate: JdbcTemplate, private val p
                 }
                 return UserToken(username, setOf(SimpleGrantedAuthority(authority)), token)
             } else {
-                throw UserUnauthorizedException("Token失效")
+                throw UserUnauthorizedException("Token失效", 40100)
             }
         }
         return null

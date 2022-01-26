@@ -40,7 +40,7 @@ class AuthEndpoint(
         } else {
             publisher.publishEvent(UserLoginFailedEvent(account.username))
             userAuthHandler.onLoginFail(account.username)
-            throw UserUnauthorizedException("用户或密码错误")
+            throw UserUnauthorizedException("用户或密码错误", 40001)
         }
     }
 

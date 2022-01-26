@@ -45,7 +45,7 @@ class TokenFilter(private val tokenService: TokenService, private val properties
             throw e
         } catch (e: Exception) {
             logger.warn("Token失效", e)
-            throw UserUnauthorizedException("Token失效", e)
+            throw UserUnauthorizedException("Token失效", 40100, e)
         }
     }
 }

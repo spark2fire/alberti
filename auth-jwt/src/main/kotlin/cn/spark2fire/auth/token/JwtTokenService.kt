@@ -43,7 +43,7 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
             return UserToken(username, setOf(SimpleGrantedAuthority(authority)), rawToken)
         } catch (e: Exception) {
             logger.warn("Token失效", e)
-            throw UserUnauthorizedException("Token失效", e)
+            throw UserUnauthorizedException("Token失效", 40100, e)
         }
     }
 
