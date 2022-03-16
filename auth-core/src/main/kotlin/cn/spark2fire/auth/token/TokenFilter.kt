@@ -6,16 +6,18 @@ import cn.spark2fire.auth.exception.UserUnauthorizedException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.util.StreamUtils
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class TokenFilter(private val tokenService: TokenService, private val properties: AuthProperties) : OncePerRequestFilter() {
+class TokenFilter(private val tokenService: TokenService, private val properties: AuthProperties) :
+    OncePerRequestFilter() {
     override fun doFilterInternal(
-            request: HttpServletRequest,
-            response: HttpServletResponse,
-            filterChain: FilterChain
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
     ) {
         try {
             val token = getToken(request)
@@ -25,8 +27,15 @@ class TokenFilter(private val tokenService: TokenService, private val properties
             }
             filterChain.doFilter(request, response)
         } catch (e: UserUnauthorizedException) {
-            response.sendError(401, e.message)
+            sendError(response, e)
         }
+    }
+
+    private fun sendError(response: HttpServletResponse, e: UserUnauthorizedException) {
+        val body = "{\"message\":\"${e.message}\",\"code\":${e.code}}"
+        response.contentType = "application/json"
+        response.status = 401
+        StreamUtils.copy(body.toByteArray(), response.outputStream)
     }
 
     private fun getToken(request: HttpServletRequest): String? {

@@ -19,7 +19,7 @@ class JwtProperties(
         /**
          * The JWT token issuer.
          */
-        var issuer: String = "spark2fire",
+        var issuer: String = "spark2fire.cn",
         /**
          * The JWT token subject.
          */
