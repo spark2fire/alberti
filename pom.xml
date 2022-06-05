@@ -12,7 +12,7 @@
 
     <groupId>cn.spark2fire</groupId>
     <artifactId>alberti</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <name>alberti</name>
     <packaging>pom</packaging>
     <description>Token service for authentication, support Redis, database, memory and JWT Token.</description>

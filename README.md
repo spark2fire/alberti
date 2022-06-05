@@ -7,7 +7,7 @@ Designed for Spring Boot projects.
 <dependency>
     <groupId>cn.spark2fire.alberti</groupId>
     <artifactId>auth-jwt</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.7</version>
 </dependency>
 ```
 ## Support Types
@@ -32,22 +32,22 @@ POST /accounts/login
 ### Logout
 ```http request
 POST /accounts/logout
-X-ACCESS-TOKEN: {{TOKEN}}
+Authorization: {{TOKEN}}
 ```
 ### Get Principal
 ```http request
 GET /accounts/principal
-X-ACCESS-TOKEN: {{TOKEN}}
+Authorization: {{TOKEN}}
 ```
 ## Token Usage
-Add `token` in Header or Parameter `X-ACCESS-TOKEN`.
+Add `token` in Header or Parameter `Authorization`.
 # Configuration
 ```yaml
 cn:
   spark2fire:
     auth:
       idle-timeout: 30
-      header-name: "X-ACCESS-TOKEN"
+      header-name: "Authorization"
       table-name: "t_token"
       redis-prefix: "TOKEN:a:"
       jwt:
