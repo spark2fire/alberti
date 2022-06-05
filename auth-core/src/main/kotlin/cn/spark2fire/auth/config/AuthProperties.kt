@@ -7,7 +7,7 @@ class AuthProperties(
         var idleTimeout: Long = 30,
         var redisPrefix: String = "TOKEN:a:",
         var tableName: String = "t_token",
-        var headerName: String = "Authorization",
+        var headerName: String = "X-ACCESS-TOKEN",
         var jwt: JwtProperties = JwtProperties()
 )
 

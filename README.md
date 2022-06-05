@@ -32,22 +32,23 @@ POST /accounts/login
 ### Logout
 ```http request
 POST /accounts/logout
-Authorization: {{TOKEN}}
+X-ACCESS-TOKEN: {{TOKEN}}
 ```
 ### Get Principal
 ```http request
 GET /accounts/principal
-Authorization: {{TOKEN}}
+X-ACCESS-TOKEN: {{TOKEN}}
 ```
 ## Token Usage
-Add `token` in Header or Parameter `Authorization`.
+
+Add `token` in Header or Parameter `X-ACCESS-TOKEN`.
 # Configuration
 ```yaml
 cn:
   spark2fire:
     auth:
       idle-timeout: 30
-      header-name: "Authorization"
+      header-name: "X-ACCESS-TOKEN"
       table-name: "t_token"
       redis-prefix: "TOKEN:a:"
       jwt:
