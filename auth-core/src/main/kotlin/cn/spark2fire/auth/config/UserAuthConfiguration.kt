@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import javax.servlet.http.HttpServletResponse
 
@@ -38,10 +39,11 @@ class UserAuthConfiguration {
 
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass(WebSecurityConfigurerAdapter::class)
-    @ConditionalOnMissingBean(WebSecurityConfigurerAdapter::class)
+    @ConditionalOnMissingBean(SecurityFilterChain::class)
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     class SpringBootWebSecurityConfiguration {
         @Configuration(proxyBeanMethods = false)
+        @ConditionalOnMissingBean(WebSecurityConfigurerAdapter::class)
         @Order(SecurityProperties.BASIC_AUTH_ORDER)
         internal class DefaultWebSecurityConfigurer(private val tokenFilter: TokenFilter) :
             WebSecurityConfigurerAdapter() {
