@@ -3,9 +3,9 @@ package cn.spark2fire.auth.token
 import cn.spark2fire.auth.config.AuthProperties
 import cn.spark2fire.auth.dto.UserToken
 import cn.spark2fire.auth.exception.UserUnauthorizedException
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SignatureException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -32,18 +32,30 @@ class JwtTokenService(private val properties: AuthProperties) : TokenService {
     override fun extractToken(rawToken: String): UserToken {
         try {
             val jws = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .requireIssuer(properties.jwt.issuer)
-                    .requireSubject(properties.jwt.subject)
-                    .requireAudience(properties.jwt.audience)
-                    .build()
-                    .parseClaimsJws(rawToken)
+                .setSigningKey(key)
+                .requireIssuer(properties.jwt.issuer)
+                .requireSubject(properties.jwt.subject)
+                .requireAudience(properties.jwt.audience)
+                .build()
+                .parseClaimsJws(rawToken)
             val username = jws.body.get("username", String::class.java)
             val authority = jws.body.get("authority", String::class.java)
             return UserToken(username, setOf(SimpleGrantedAuthority(authority)), rawToken)
+        } catch (e: MalformedJwtException) {
+            logger.warn("JWT Token格式错误", e)
+            throw UserUnauthorizedException("JWT Token格式错误", 40101, e)
+        } catch (e: ExpiredJwtException) {
+            logger.warn("JWT Token过期", e)
+            throw UserUnauthorizedException("JWT Token过期", 40102, e)
+        } catch (e: UnsupportedJwtException) {
+            logger.warn("不支持的JWT Token", e)
+            throw UserUnauthorizedException("不支持的JWT Token", 40103, e)
+        } catch (e: SignatureException) {
+            logger.warn("JWT Token签名验证失败", e)
+            throw UserUnauthorizedException("JWT Token签名验证失败", 40104, e)
         } catch (e: Exception) {
-            logger.warn("Token失效", e)
-            throw UserUnauthorizedException("Token失效", 40100, e)
+            logger.warn("解析Token失败", e)
+            throw UserUnauthorizedException("解析Token失败", 40100, e)
         }
     }
 
